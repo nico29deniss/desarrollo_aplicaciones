@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Galería Simple</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    max-width: 600px;
+    margin: 30px auto;
+    padding: 0 20px;
+    background: #f0f0f0;
+  }
+  h1 {
+    text-align: center;
+  }
+  #input-url {
+    width: 70%;
+    padding: 8px;
+  }
+  #add-btn, #delete-btn {
+    padding: 8px 12px;
+    margin-left: 5px;
+  }
+  #gallery {
+    margin-top: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  #gallery img {
+    width: 150px;
+    height: 100px;
+    object-fit: cover;
+    border: 2px solid transparent;
+    cursor: pointer;
+  }
+  #gallery img.selected {
+    border-color: blue;
+  }
+</style>
+</head>
+<body>
+
+<h1>Galería Simple</h1>
+
+<input type="url" id="input-url" placeholder="Ingresa URL de imagen" />
+<button id="add-btn" disabled>Agregar Imagen</button>
+<button id="delete-btn" disabled>Eliminar Imagen Seleccionada</button>
+
+<div id="gallery"></div>
+
+<script>
+  const inputUrl = document.getElementById('input-url');
+  const addBtn = document.getElementById('add-btn');
+  const deleteBtn = document.getElementById('delete-btn');
+  const gallery = document.getElementById('gallery');
+
+  let selectedImg = null;
+
+  inputUrl.addEventListener('input', () => {
+    addBtn.disabled = inputUrl.value.trim() === '';
+  });
+
+  addBtn.addEventListener('click', () => {
+    const url = inputUrl.value.trim();
+    if (!url) return;
+
+    const img = document.createElement('img');
+    img.src = url;
+
+    img.addEventListener('click', () => {
+      if (selectedImg) selectedImg.classList.remove('selected');
+      img.classList.add('selected');
+      selectedImg = img;
+      deleteBtn.disabled = false;
+    });
+
+    gallery.appendChild(img);
+    inputUrl.value = '';
+    addBtn.disabled = true;
+  });
+
+  deleteBtn.addEventListener('click', () => {
+    if (selectedImg) {
+      gallery.removeChild(selectedImg);
+      selectedImg = null;
+      deleteBtn.disabled = true;
+    }
+  });
+</script>
+
+</body>
+</html>
